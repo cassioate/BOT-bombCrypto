@@ -8,6 +8,12 @@ def procurarImagem(imagem):
     img = None
     confidence = 0.9
     while img == None:
+        error = pyautogui.locateCenterOnScreen('./assets/Error.png', confidence=confidence)
+        ok = pyautogui.locateCenterOnScreen('./assets/Ok.png', confidence=confidence)
+        if error != None:
+            raise Exception('Erro ao achar a imagem: ' + imagem)
+        if ok != None:
+            raise Exception('Erro ao achar a imagem: ' + imagem)
         print("Procurando imagem: "+ imagem)
         img = pyautogui.locateCenterOnScreen('./assets/'+ imagem+'.png', confidence=confidence)
         contadorProcurarImagem += 1
@@ -123,7 +129,7 @@ def subindoTela3x():
     pyautogui.dragTo(x=670, y=626, duration=1.5)
     pyautogui.mouseUp(button='left')
 
-def verificarOsDoiSuperRarosComExcessoDeBateria():
+def verificarOsDoiSuperRarosComExcessoDeBateria(xHome):
     #VERIFICANDO SE OS DOIS SUPER RAROS ESTÃO COM EXCESSO DE BATERIA
     descerTela1x()
     if (procurarImagemSemRetornarErro("SuperRaroXpCheioCavaleiro") and procurarImagemSemRetornarErro("SuperRaroXpCheioBruxa")):
@@ -159,7 +165,7 @@ def colocarHeroisNaCasa():
     xHome = inserirEpicESuperRaroNaCasa()
     descerTela2x()
     inserirLegendESuperRaroNaCasa(xHome)
-    verificarOsDoiSuperRarosComExcessoDeBateria()
+    verificarOsDoiSuperRarosComExcessoDeBateria(xHome)
     descerTela3x()
     colocarTodosQueNaoEstaoNaCasaParaTrabalhar()
 
@@ -211,4 +217,3 @@ while True:
         pyautogui.keyDown("ctrl")
         pyautogui.press("f5")
         time.sleep(5)
-

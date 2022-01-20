@@ -11,16 +11,16 @@ def procurarImagem(imagem):
         print("Procurando imagem: "+ imagem)
         img = pyautogui.locateCenterOnScreen('./assets/'+ imagem+'.png', confidence=confidence)
         contadorProcurarImagem += 1
-        print(img)
         if contadorProcurarImagem >= 500:
             raise Exception('Erro ao achar a imagem: ' + imagem)
     return img
 
 def procurarImagemSemRetornarErro(imagem):
-    confidence = 0.75
+    confidence = 0.85
+    if imagem == "SuperRaroXpCheioCavaleiro" or imagem == "SuperRaroXpCheioBruxa":
+        confidence = 0.99
     print("Procurando imagem: "+ imagem)
     img = pyautogui.locateCenterOnScreen('./assets/'+ imagem+'.png', confidence=confidence)
-    print(img)
     if img != None:
         return True
 
@@ -55,15 +55,40 @@ def procurarLocalizacaoDaImagemPelosEixos(imagem):
     x, y = pyautogui.locateCenterOnScreen('./assets/'+ imagem+'.png', confidence=confidence)
     return x, y
 
-def colocarHeroisNaCasa():
+def inserirEpicESuperRaroNaCasa():
     #INSERINDO NA CASA EPIC E SUPER RARO
     xHome, yHome = procurarLocalizacaoDaImagemPelosEixos("Home")
     x590515, y590515 = procurarLocalizacaoDaImagemPelosEixos("590515")
-
     pyautogui.click(x=xHome, y=y590515, duration=3)
     time.sleep(5)
     pyautogui.click(x=xHome, y=y590515, duration=3)
-    
+    return xHome
+
+def inserirLegendESuperRaroNaCasa(xHome):
+    #INSERINDO NA CASA LEGEND E SUPER RARO
+    xLegend, yLegend = procurarLocalizacaoDaImagemPelosEixos("Legend-746073")
+    pyautogui.click(x=xHome, y=yLegend, duration=3)
+    time.sleep(5)
+    pyautogui.click(x=xHome, y=yLegend, duration=3)
+
+def descerTela3x():
+    pyautogui.moveTo(x=673, y=626)
+    pyautogui.mouseDown(button='left')
+    pyautogui.dragTo(x=670, y=380, duration=1.5)
+    pyautogui.mouseUp(button='left')
+    time.sleep(2)
+    pyautogui.moveTo(x=673, y=626)
+    pyautogui.mouseDown(button='left')
+    pyautogui.dragTo(x=670, y=380, duration=1.5)
+    pyautogui.mouseUp(button='left')
+    time.sleep(2)
+    pyautogui.moveTo(x=673, y=626)
+    pyautogui.mouseDown(button='left')
+    pyautogui.dragTo(x=670, y=380, duration=1.5)
+    pyautogui.mouseUp(button='left')
+    time.sleep(2)
+
+def descerTela2x():
     #DESCER A TELA PARA PROCURAR OUTROS HEROIS
     pyautogui.moveTo(x=673, y=626)
     pyautogui.mouseDown(button='left')
@@ -75,17 +100,32 @@ def colocarHeroisNaCasa():
     pyautogui.dragTo(x=670, y=380, duration=1.5)
     pyautogui.mouseUp(button='left')
 
-    #INSERINDO NA CASA LEGEND E SUPER RARO
-    xLegend, yLegend = procurarLocalizacaoDaImagemPelosEixos("Legend-746073")
-    pyautogui.click(x=xHome, y=yLegend, duration=3)
-    time.sleep(5)
-    pyautogui.click(x=xHome, y=yLegend, duration=3)
-
-    #VERIFICANDO SE OS DOIS SUPER RAROS ESTÃO COM EXCESSO DE BATERIA
+def descerTela1x():
     pyautogui.moveTo(x=673, y=626)
     pyautogui.mouseDown(button='left')
-    pyautogui.dragTo(x=670, y=380, duration=1.5)
+    pyautogui.dragTo(x=670, y=400, duration=1.5)
     pyautogui.mouseUp(button='left')
+
+def subindoTela3x():
+    #SUBINDO TELA
+    pyautogui.moveTo(x=673, y=380)
+    pyautogui.mouseDown(button='left')
+    pyautogui.dragTo(x=670, y=626, duration=1.5)
+    pyautogui.mouseUp(button='left')
+    time.sleep(2)
+    pyautogui.moveTo(x=673, y=380)
+    pyautogui.mouseDown(button='left')
+    pyautogui.dragTo(x=670, y=626, duration=1.5)
+    pyautogui.mouseUp(button='left')
+    time.sleep(2)
+    pyautogui.moveTo(x=673, y=380)
+    pyautogui.mouseDown(button='left')
+    pyautogui.dragTo(x=670, y=626, duration=1.5)
+    pyautogui.mouseUp(button='left')
+
+def verificarOsDoiSuperRarosComExcessoDeBateria():
+    #VERIFICANDO SE OS DOIS SUPER RAROS ESTÃO COM EXCESSO DE BATERIA
+    descerTela1x()
     if (procurarImagemSemRetornarErro("SuperRaroXpCheioCavaleiro") and procurarImagemSemRetornarErro("SuperRaroXpCheioBruxa")):
         xSRaro, ySRaro = procurarLocalizacaoDaImagemPelosEixos("SuperRaroXpCheioCavaleiro")
         xWork, yWork = procurarLocalizacaoDaImagemPelosEixos("Work")
@@ -94,52 +134,20 @@ def colocarHeroisNaCasa():
         xSRaro2, ySRaro2 = procurarLocalizacaoDaImagemPelosEixos("SuperRaroXpCheioBruxa")
         pyautogui.click(x=xWork, y=ySRaro2, duration=3)
 
-        #SUBINDO TELA
-        pyautogui.moveTo(x=673, y=380)
-        pyautogui.mouseDown(button='left')
-        pyautogui.dragTo(x=670, y=626, duration=1.5)
-        pyautogui.mouseUp(button='left')
-        time.sleep(2)
-        pyautogui.moveTo(x=673, y=380)
-        pyautogui.mouseDown(button='left')
-        pyautogui.dragTo(x=670, y=626, duration=1.5)
-        pyautogui.mouseUp(button='left')
-        time.sleep(2)
-        pyautogui.moveTo(x=673, y=380)
-        pyautogui.mouseDown(button='left')
-        pyautogui.dragTo(x=670, y=626, duration=1.5)
-        pyautogui.mouseUp(button='left')
+        subindoTela3x()
 
         #PEGANDO O SRARO DE ID 590874(SuperRaroCowboy)
         xSRaro3, ySRaro3 = procurarLocalizacaoDaImagemPelosEixos("SuperRaroCowboy")
         pyautogui.click(x=xHome, y=ySRaro3, duration=3)
         
-        #DESCENDO A TELA PARA PEGAR O SAPO sRARO
-        pyautogui.moveTo(x=673, y=626)
-        pyautogui.mouseDown(button='left')
-        pyautogui.dragTo(x=670, y=400, duration=1.5)
-        pyautogui.mouseUp(button='left')
+        descerTela1x()
 
         #PEGANDO O SRARO DE ID 694504(Sapo sRARO)
         xSRaro4, ySRaro4 = procurarLocalizacaoDaImagemPelosEixos("SuperRaroSapo")
         pyautogui.click(x=xHome, y=ySRaro4, duration=3)
 
+def colocarTodosQueNaoEstaoNaCasaParaTrabalhar():
     #COLOCANDO O RESTANTE PARA TRABALHAR
-    pyautogui.moveTo(x=673, y=626)
-    pyautogui.mouseDown(button='left')
-    pyautogui.dragTo(x=670, y=380, duration=1.5)
-    pyautogui.mouseUp(button='left')
-    time.sleep(2)
-    pyautogui.moveTo(x=673, y=626)
-    pyautogui.mouseDown(button='left')
-    pyautogui.dragTo(x=670, y=380, duration=1.5)
-    pyautogui.mouseUp(button='left')
-    time.sleep(2)
-    pyautogui.moveTo(x=673, y=626)
-    pyautogui.mouseDown(button='left')
-    pyautogui.dragTo(x=670, y=380, duration=1.5)
-    pyautogui.mouseUp(button='left')
-    time.sleep(2)
     xRaro, yRaro = procurarLocalizacaoDaImagemPelosEixos("Raro-3322411")
     xWork, yWork = procurarLocalizacaoDaImagemPelosEixos("Work")
     for i in range(20):
@@ -147,7 +155,13 @@ def colocarHeroisNaCasa():
     pyautogui.click(procurarImagem("X"), duration=3)
     pyautogui.click(procurarImagem("TreasureHunt"), duration=3)
 
-    
+def colocarHeroisNaCasa():
+    xHome = inserirEpicESuperRaroNaCasa()
+    descerTela2x()
+    inserirLegendESuperRaroNaCasa(xHome)
+    verificarOsDoiSuperRarosComExcessoDeBateria()
+    descerTela3x()
+    colocarTodosQueNaoEstaoNaCasaParaTrabalhar()
 
 conectar = True
 trabalhar = True
@@ -170,9 +184,7 @@ while True:
             main = True
 
         while main == True:
-            print(contadorZZZ, main, descansar)
             contadorZZZ, main, descansar = existirZzz(contadorZZZ, main, descansar)
-            print(contadorZZZ, main, descansar)
             time.sleep(90)
             resetarPosicaoDosBonecosNoMapa()
 
@@ -188,7 +200,7 @@ while True:
             for i in range(360):
                 time.sleep(10)
                 if (i % 9 == 0):
-                    resetarPosicaoDosBonecosNoMapa
+                    resetarPosicaoDosBonecosNoMapa()
 
             descansar = False
             trabalhar = True

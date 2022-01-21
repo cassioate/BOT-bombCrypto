@@ -29,8 +29,12 @@ def procurarImagemSemRetornarErro(imagem):
     img = pyautogui.locateCenterOnScreen('./assets/'+ imagem+'.png', confidence=confidence)
     if img != None:
         return True
+    return False
 
 def conectarFunc():
+    pyautogui.keyDown("ctrl")
+    pyautogui.press("f5")
+    pyautogui.keyUp("ctrl")
     pyautogui.click(procurarImagem("ConnectWallet"), duration=3)
     pyautogui.click(procurarImagem("AssinarMetamask"), duration=3)
 
@@ -156,7 +160,7 @@ def colocarTodosQueNaoEstaoNaCasaParaTrabalhar():
     #COLOCANDO O RESTANTE PARA TRABALHAR
     xRaro, yRaro = procurarLocalizacaoDaImagemPelosEixos("Raro-3322411")
     xWork, yWork = procurarLocalizacaoDaImagemPelosEixos("Work")
-    for i in range(20):
+    for i in range(12):
         pyautogui.click(x=xWork, y=yRaro, duration=3)
     pyautogui.click(procurarImagem("X"), duration=3)
     pyautogui.click(procurarImagem("TreasureHunt"), duration=3)
@@ -169,12 +173,28 @@ def colocarHeroisNaCasa():
     descerTela3x()
     colocarTodosQueNaoEstaoNaCasaParaTrabalhar()
 
+def reiniciarBugDoBau(contador, contadorResetBugDoBau):
+    resetBugDoBau = procurarImagemSemRetornarErro("newMap")
+    if resetBugDoBau == True:
+        contadorResetBugDoBau += 1
+    if (contador != 0 and contador % 900 == 0):
+        if contadorResetBugDoBau == 0:
+            raise Exception('Erro ao achar a imagem: ' + imagem)
+        else:
+            contadorResetBugDoBau = 0
+    contador += 90
+    return contador, contadorResetBugDoBau
+
 conectar = True
 trabalhar = True
 main = False
 descansar = False
 contadorZZZ = 0
+resetBugDoBau = False
+contadorDeTempoBugDoBau = 0
+contadorResetBugDoBau = 0
 #CONNECT
+time.sleep(3)
 while True:
     try:
         conectar = True
@@ -192,6 +212,7 @@ while True:
         while main == True:
             contadorZZZ, main, descansar = existirZzz(contadorZZZ, main, descansar)
             time.sleep(90)
+            contadorDeTempoBugDoBau, contadorResetBugDoBau = reiniciarBugDoBau(contadorDeTempoBugDoBau, contadorResetBugDoBau)
             resetarPosicaoDosBonecosNoMapa()
 
         while descansar == True:
@@ -205,15 +226,11 @@ while True:
             colocarHeroisNaCasa()
             for i in range(360):
                 time.sleep(10)
-                if (i % 9 == 0):
+                if (i != 0 and i % 9 == 0):
                     resetarPosicaoDosBonecosNoMapa()
-
             descansar = False
-            trabalhar = True
+            conectar = True
 
     except:
         print("Ocorreu um erro")
         conectar = True
-        pyautogui.keyDown("ctrl")
-        pyautogui.press("f5")
-        time.sleep(5)

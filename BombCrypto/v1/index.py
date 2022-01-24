@@ -40,9 +40,17 @@ def conectarFunc():
 
 def enviarParaTrabalhar():
     pyautogui.click(procurarImagem("Heroes"), duration=3)
-    pyautogui.click(procurarImagem("AllVerde"), duration=3)
+    if procurarImagemSemRetornarErro("AllVerde"):
+        pyautogui.click(procurarImagem("AllVerde"), duration=3)
+    else:
+        pyautogui.click(procurarImagem("AllLaranja"), duration=3)
+        pyautogui.click(procurarImagem("AllVerde"), duration=3)
     pyautogui.click(procurarImagem("X"), duration=3)
     pyautogui.click(procurarImagem("TreasureHunt"), duration=3)
+
+def enviarParaTrabalharDentroDoWhile():
+    pyautogui.click(procurarImagem("SetaVerdeVoltandoParaOMenu"), duration=3)
+    enviarParaTrabalhar()
 
 def resetarPosicaoDosBonecosNoMapa():
     print("Atualizando Bonecos")
@@ -61,9 +69,12 @@ def existirZzz(contadorZZZ, main, descansar):
     return contadorZZZ, main, descansar
 
 def procurarLocalizacaoDaImagemPelosEixos(imagem):
-    confidence = 0.9
-    x, y = pyautogui.locateCenterOnScreen('./assets/'+ imagem+'.png', confidence=confidence)
-    return x, y
+    if procurarImagemSemRetornarErro(imagem):
+        confidence = 0.9
+        x, y = pyautogui.locateCenterOnScreen('./assets/'+ imagem+'.png', confidence=confidence)
+        return x, y
+    else:
+        return None, None
 
 def inserirEpicESuperRaroNaCasa():
     #INSERINDO NA CASA EPIC E SUPER RARO
@@ -194,7 +205,7 @@ resetBugDoBau = False
 contadorDeTempoBugDoBau = 0
 contadorResetBugDoBau = 0
 #CONNECT
-time.sleep(3)
+# time.sleep(3)
 while True:
     try:
         conectar = True
@@ -204,32 +215,63 @@ while True:
             trabalhar = True
             main = False
 
+        enviarParaTrabalhar()
         while trabalhar == True:
-            enviarParaTrabalhar()
-            trabalhar = False
-            main = True
-
-        while main == True:
-            contadorZZZ, main, descansar = existirZzz(contadorZZZ, main, descansar)
-            time.sleep(90)
-            contadorDeTempoBugDoBau, contadorResetBugDoBau = reiniciarBugDoBau(contadorDeTempoBugDoBau, contadorResetBugDoBau)
-            resetarPosicaoDosBonecosNoMapa()
-
-        while descansar == True:
-            pyautogui.click(procurarImagem("SetaVerdeVoltandoParaOMenu"), duration=3)
-            pyautogui.click(procurarImagem("Heroes"), duration=3)
-            if procurarImagemSemRetornarErro("AllLaranja"):
-                pyautogui.click(procurarImagem("AllLaranja"), duration=3)
-            else:
-                pyautogui.click(procurarImagem("AllVerde"), duration=3)
-                pyautogui.click(procurarImagem("AllLaranja"), duration=3)
-            colocarHeroisNaCasa()
-            for i in range(360):
+            enviarParaTrabalharDentroDoWhile()
+            for i in range(720):
                 time.sleep(10)
                 if (i != 0 and i % 9 == 0):
+                    if (i < 280):
+                        contadorDeTempoBugDoBau, contadorResetBugDoBau = reiniciarBugDoBau(contadorDeTempoBugDoBau, contadorResetBugDoBau)
                     resetarPosicaoDosBonecosNoMapa()
-            descansar = False
-            conectar = True
+
+# while True:
+#     try:
+#         conectar = True
+#         while conectar == True:
+#             conectarFunc()
+#             conectar = False
+#             trabalhar = True
+#             main = False
+
+#         while trabalhar == True:
+#             enviarParaTrabalhar()
+#             trabalhar = False
+#             main = True
+
+#         while main == True:
+#             contadorZZZ, main, descansar = existirZzz(contadorZZZ, main, descansar)
+#             time.sleep(90)
+#             contadorDeTempoBugDoBau, contadorResetBugDoBau = reiniciarBugDoBau(contadorDeTempoBugDoBau, contadorResetBugDoBau)
+#             resetarPosicaoDosBonecosNoMapa()
+
+# def botandoParaDescansar():
+#     pyautogui.click(procurarImagem("SetaVerdeVoltandoParaOMenu"), duration=3)
+#     pyautogui.click(procurarImagem("Heroes"), duration=3)
+#     if procurarImagemSemRetornarErro("AllLaranja"):
+#         pyautogui.click(procurarImagem("AllLaranja"), duration=3)
+#     else:
+#         pyautogui.click(procurarImagem("AllVerde"), duration=3)
+#         pyautogui.click(procurarImagem("AllLaranja"), duration=3)
+#     pyautogui.click(procurarImagem("X"), duration=3)
+#     pyautogui.click(procurarImagem("TreasureHunt"), duration=3)
+
+#         while descansar == True:
+#             pyautogui.click(procurarImagem("SetaVerdeVoltandoParaOMenu"), duration=3)
+#             pyautogui.click(procurarImagem("Heroes"), duration=3)
+#             if procurarImagemSemRetornarErro("AllLaranja"):
+#                 pyautogui.click(procurarImagem("AllLaranja"), duration=3)
+#             else:
+#                 pyautogui.click(procurarImagem("AllVerde"), duration=3)
+#                 pyautogui.click(procurarImagem("AllLaranja"), duration=3)
+#             colocarHeroisNaCasa()
+            
+#             for i in range(360):
+#                 time.sleep(10)
+#                 if (i != 0 and i % 9 == 0):
+#                     resetarPosicaoDosBonecosNoMapa()
+#             descansar = False
+#             conectar = True
 
     except:
         print("Ocorreu um erro")

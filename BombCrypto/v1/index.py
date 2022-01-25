@@ -69,17 +69,22 @@ def subindoTela1x():
     pyautogui.mouseUp(button='left')
     time.sleep(2)
 
-def reiniciarBugDoBau(contador, contadorResetBugDoBau):
+def reiniciarBugDoBau(tempoAtual, contadorDeTempoBugDoBau, contadorResetBugDoBau, hasJustResetNow, blockReset):
     resetBugDoBau = procurarImagemSemRetornarErro("newMap")
     if resetBugDoBau == True:
         contadorResetBugDoBau += 1
-    if (contador != 0 and contador % 900 == 0):
-        if contadorResetBugDoBau == 0:
-            raise Exception('Erro ao achar a imagem: ' + imagem)
+    if (contadorDeTempoBugDoBau != 0 and contadorDeTempoBugDoBau % 900 == 0 and tempoAtual <= 1800):
+        if contadorResetBugDoBau == 0 and hasJustResetNow == False:
+            hasJustResetNow = True
+            blockReset = False
+            return contadorDeTempoBugDoBau, contadorResetBugDoBau, hasJustResetNow, blockReset
         else:
+            if contadorDeTempoBugDoBau % 1800 == 0:
+                hasJustResetNow = False
             contadorResetBugDoBau = 0
-    contador += 1
-    return contador, contadorResetBugDoBau
+    contadorDeTempoBugDoBau += 1
+    blockReset = True
+    return contadorDeTempoBugDoBau, contadorResetBugDoBau, hasJustResetNow, blockReset
 
 def goToWork():
     pyautogui.click(procurarImagem("SetaVerdeVoltandoParaOMenu"), duration=3)
@@ -94,14 +99,18 @@ def goToWork():
 
 conectar = True
 trabalhar = False
-contadorZZZ = 0
 contadorDeTempoBugDoBau = 0
 contadorResetBugDoBau = 0
+hasJustResetNow = False
+blockReset = True
 #CONNECT
 time.sleep(3)
 while True:
     try:
         conectar = True
+        contadorDeTempoBugDoBau = 0
+        contadorResetBugDoBau = 0
+        blockReset = True
         while conectar == True:
             conectarFunc()
             conectar = False
@@ -109,14 +118,17 @@ while True:
 
         while trabalhar == True:
             goToWork()
-            for i in range(4800):
+            for i in range(3600):
                 time.sleep(1)
+                if (i < 1200):
+                    contadorDeTempoBugDoBau, contadorResetBugDoBau, hasJustResetNow, blockReset = reiniciarBugDoBau(contadorDeTempoBugDoBau, contadorResetBugDoBau, hasJustResetNow, blockReset)
+                    if hasJustResetNow == True and blockReset == False:
+                        raise Exception('Erro ao achar um novo mapa')
                 if (i != 0 and i % 90 == 0):
-                    if (i < 1200):
-                        contadorDeTempoBugDoBau, contadorResetBugDoBau = reiniciarBugDoBau(contadorDeTempoBugDoBau, contadorResetBugDoBau)
                     resetarPosicaoDosBonecosNoMapa()
             trabalhar = False
 
-    except:
-        print("Ocorreu um erro")
+    except BaseException as err:
+        print("Ocorreu um ERRO:")
+        print(err)
         conectar = True

@@ -120,10 +120,9 @@ while True:
             goToWork()
             for i in range(3600):
                 time.sleep(1)
-                if (i < 1200):
-                    contadorDeTempoBugDoBau, contadorResetBugDoBau, hasJustResetNow, blockReset = reiniciarBugDoBau(contadorDeTempoBugDoBau, contadorResetBugDoBau, hasJustResetNow, blockReset)
-                    if hasJustResetNow == True and blockReset == False:
-                        raise Exception('Erro ao achar um novo mapa')
+                contadorDeTempoBugDoBau, contadorResetBugDoBau, hasJustResetNow, blockReset = reiniciarBugDoBau(i, contadorDeTempoBugDoBau, contadorResetBugDoBau, hasJustResetNow, blockReset)
+                if hasJustResetNow == True and blockReset == False:
+                    raise Exception('Erro ao achar um novo mapa')
                 if (i != 0 and i % 90 == 0):
                     resetarPosicaoDosBonecosNoMapa()
             trabalhar = False

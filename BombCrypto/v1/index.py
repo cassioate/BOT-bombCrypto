@@ -9,6 +9,7 @@ def conectarFunc():
     pyautogui.keyUp("ctrl")
     pyautogui.click(procurarImagem("ConnectWallet"), duration=3)
     pyautogui.click(procurarImagem("AssinarMetamask"), duration=3)
+    pyautogui.click(procurarImagem("TreasureHunt"), duration=3)
 
 def procurarImagem(imagem):
     contadorProcurarImagem = 0
@@ -80,16 +81,9 @@ def reiniciarBugDoBau(contador, contadorResetBugDoBau):
     contador += 1
     return contador, contadorResetBugDoBau
 
-def goToWorkAtTheBeginner():
-    pyautogui.click(procurarImagem("Heroes"), duration=3)
-    goToWork()
-
-def gotToWorkInTheLoop():
+def goToWork():
     pyautogui.click(procurarImagem("SetaVerdeVoltandoParaOMenu"), duration=3)
     pyautogui.click(procurarImagem("Heroes"), duration=3)
-    goToWork()
-
-def goToWork():
     if procurarImagemSemRetornarErro("AllVerde"):
         pyautogui.click(procurarImagem("AllVerde"), duration=3)
     else:
@@ -112,10 +106,9 @@ while True:
             conectarFunc()
             conectar = False
             trabalhar = True
-        goToWorkAtTheBeginner()
 
         while trabalhar == True:
-            gotToWorkInTheLoop()
+            goToWork()
             for i in range(4800):
                 time.sleep(1)
                 if (i != 0 and i % 90 == 0):
